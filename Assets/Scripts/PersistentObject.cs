@@ -9,9 +9,28 @@ public class PersistentObject : MonoBehaviour
     private string instancePrivateDebugText = "instance private";
     public string instancePublicDebugText = "instance public";
 
+    //1
+    private static PersistentObject staticInstance = null;
+
+    //2
+    public static PersistentObject GetInstance()
+    {
+        //3
+        return staticInstance;
+    }
+
     void Awake()
     {
+        //4
+        if (staticInstance == null)
+        {
+            DontDestroyOnLoad(this.gameObject);
+            return;
+        }
+
         DontDestroyOnLoad(gameObject);
+        //5 IMP
+        staticInstance = this;
     }
 
     void Start()
@@ -19,6 +38,8 @@ public class PersistentObject : MonoBehaviour
         staticPublicDebugText = "Hello (public)";
         staticPrivateDebugText = "Hello (private)";
         StartCoroutine(Loop());
+
+        GameSetting.volume = 1;
     }
 
     void Update()
